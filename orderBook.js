@@ -1,50 +1,63 @@
-/*What are we doing?
-  / cryptoCurrancy order sorter
-  /--Reqs--
-    /tracks all buys and all sale requests
-    /checks orders agianst the book
-      /if match it fulfills order instantly
-    /if not it is added to the book for later fullfillment
-  
-    
-  ////strategy////
-    /put sell orders into updatedBook 
-    /check buy orders agianst array
-      /send matching orders to reconcileOrder
-      /keep unmatched orders in existingBook
- 
- 
-      //////switch///////
-function orderSorter(existingBook) {
-  if (existingBook) {
-    existingBook.push([{}])
-  } return reconcileOrder
-   switch (incomingOrder) {
-
-    case existingBook:
-
-      break
-    default: 'Empty Book'
-  
-   
-} */
-
-function orderMatching(existingBook, incomingOrder) {
-  for (let i = 0; i < existingBook.length; i++) {
-    if (existingBook[i][quantity] === incomingOrder.quantity) {
-      existingBook.splice(existingBook[i])
-    }
-  }
-}
-
 function reconcileOrder(existingBook, incomingOrder) {
-  if (existingBook.length < 2) {
-    existingBook.push(incomingOrder)
-    return existingBook
-  } else {
-    return orderMatching(existingBook)
+  let updatedBook = []
+  let sameType = existingBook.map((order) => { return order.type })
+  let sameQuantity = existingBook.map((order) => { return order.quantity })
+  let samePrice = existingBook.map((order) => { return order.price })
+
+  if (existingBook.length === 0) {
+
+    return updatedBook = existingBook.concat(incomingOrder)
+  }
+  if (sameType[0] === incomingOrder.type) {
+
+    return updatedBook = existingBook.concat(incomingOrder)
+  }
+  if (sameType != incomingOrder.type && existingBook.length < 2) {
+
+    return updatedBook = existingBook.concat(incomingOrder)
+  }
+  if (samePrice === incomingOrder.price && sameType[0] != incomingOrder.type) {
+
+    return updatedBook = existingBook.concat(incomingOrder)
+  }
+  if (sameQuantity[0] === incomingOrder.quantity && samePrice[0] === incomingOrder.price) {
+
+    return updatedBook = existingBook.slice(1)
+  }
+  if (sameQuantity[0] > incomingOrder.quantity && sameType[0] != incomingOrder.type) {
+    existingBook[0].quantity = sameQuantity[0] - incomingOrder.quantity
+    updatedBook = existingBook.reverse()
+
+    return updatedBook
+  }
+  if (sameQuantity[0] + sameQuantity[1] >= incomingOrder.quantity && existingBook.length <= 2) {
+    incomingOrder.quantity = incomingOrder.quantity - sameQuantity[0]
+    updatedBook = updatedBook.concat(incomingOrder, existingBook[1])
+
+    return updatedBook.reverse()
+  }
+  if (incomingOrder.quantity === sameQuantity[0] + sameQuantity[1]) {
+
+    return updatedBook = existingBook.slice(2)
+  }
+  if (sameQuantity[0] + sameQuantity[1] >= incomingOrder.quantity && samePrice[0, 1] === incomingOrder.price) {
+    existingBook[0].quantity = ((sameQuantity[0] + sameQuantity[1]) - incomingOrder.quantity)
+    existingBook.concat(existingBook[0].quantity)
+    updatedBook = existingBook.filter((items => items.quantity != sameQuantity[0])).reverse()
+
+    return updatedBook
+  }
+  if (sameQuantity[0] + sameQuantity[1] <= incomingOrder.quantity && samePrice[0, 1] === incomingOrder.price) {
+    incomingOrder.quantity = incomingOrder.quantity - (sameQuantity[0] + sameQuantity[1])
+    updatedBook = existingBook.concat(incomingOrder)
+    updatedBook = updatedBook.slice(2)
+
+    return updatedBook
   }
 }
+
+
+
 
 
 module.exports = reconcileOrder

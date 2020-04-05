@@ -1,0 +1,73 @@
+
+// function isOrderSizeMetFillable(existingBook, incomingOrder) {
+//   let orderQuantity = []
+//   for (let i = 0; i < existingBook.length; i++) {
+//     if (existingBook[i].price === incomingOrder.price && existingBook[i].quantity < incomingOrder.quantity) {
+//       orderQuantity.push(existingBook[i].quantity)
+
+
+//     }
+//   }
+// }
+
+function isPartialOrderFillable(existingBook, incomingOrder) {
+  for (let i = 0; i < existingBook.length; i++) {
+    if (existingBook[i].price === incomingOrder.price && existingBook[i].quantity < incomingOrder.quantity) {
+      incomingOrder.quantity = incomingOrder.quantity - existingBook[i].quantity
+      existingBook.splice(existingBook[i], (existingBook.length - 1))
+      existingBook.push(incomingOrder)
+    }
+  } return reconcileOrder
+}
+
+
+function isPriceMatchFillable(existingBook, incomingOrder) {
+  for (let i = 0; i < existingBook.length; i++) {
+    if (existingBook[i].quantity > incomingOrder.quantity && existingBook[i].type != incomingOrder.type) {
+      existingBook[i].quantity = existingBook[i].quantity - incomingOrder.quantity
+      existingBook.indexOf(existingBook[i].quantity)
+    } else if (existingBook[i].price === incomingOrder.price) {
+      isPartialOrderFillable(existingBook, incomingOrder)
+    }
+  } return existingBook.reverse(existingBook)
+}
+function isMatchingFillable(existingBook) {
+  for (let i = 0; i < existingBook.length; i++) {
+    existingBook.splice(i, 1)
+  }
+}
+
+function addsOrder(existingBook, incomingOrder) {
+  existingBook.push(incomingOrder)
+
+}
+
+function isBookEmpty(existingBook, incomingOrder) {
+  if (existingBook.length < 1) {
+    existingBook.push(incomingOrder)
+
+  }
+}
+
+
+function reconcileOrder(existingBook, incomingOrder) {
+  let i = 0; (i <= existingBook.length)
+  if (existingBook.length === 0) {
+    isBookEmpty(existingBook, incomingOrder)
+  }
+  else if (existingBook[i].type === incomingOrder.type || existingBook[i].type != incomingOrder.type && existingBook.length < 2) {
+    addsOrder(existingBook, incomingOrder)
+    i++
+  }
+  else if (existingBook[i].quantity === incomingOrder.quantity) {
+    isMatchingFillable(existingBook, incomingOrder)
+  }
+  else if (existingBook[i].price === incomingOrder.price) {
+    isPriceMatchFillable(existingBook, incomingOrder)
+  }
+  return existingBook
+}
+
+
+
+module.exports = reconcileOrder
